@@ -1,5 +1,5 @@
 #!/bin/bash
-PSQL="psql --username=freecodecamp --dbname=<database_name> -t --no-align -c"
+PSQL="psql --username=freecodecamp --dbname=periodic_table -t --no-align -c"
 
 if [[ -z $1 ]]
 then
@@ -8,12 +8,18 @@ else
   
   if [[ $1 =~ ^[0-9]$ ]]
   then
-    echo This is a positive integer
+    QUERY_ATOMIC_NUMBER=$($PSQL "SELECT * FROM ELEMENTS WHERE atomic_number=$1")
+    echo "$QUERY_ATOMIC_NUMBER"
+
   elif [[ $1 =~ ^[a-zA-Z]{1,2}$ ]]
   then
-    echo This is a one or two lettered text
+    QUERY_SYMBOL=$($PSQL "SELECT * FROM ELEMENTS WHERE symbol='$1'")
+    echo "$QUERY_SYMBOL"
+
   else
-    echo Another input was inserted
+    QUERY_NAME=$($PSQL "SELECT * FROM ELEMENTS WHERE name='$1'")
+    echo "$QUERY_NAME"
+
   fi
 
 fi
